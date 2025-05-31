@@ -118,7 +118,7 @@ node index.js
 
 ### Start Frontend
 ```bash
-cd ../frontend
+cd frontend
 npm start
 ```
 

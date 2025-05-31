@@ -1,7 +1,7 @@
 
-# 🌦️ WhetherWise
+# 🌦️ WeatherWise
 
-WhetherWise is a full-stack weather dashboard application that allows users to:
+WetherWise is a full-stack weather dashboard application that allows users to:
 - Create an account and log in
 - Add and save cities to their dashboard
 - View real-time weather data fetched from the OpenWeatherMap API
@@ -11,7 +11,7 @@ WhetherWise is a full-stack weather dashboard application that allows users to:
 ## 🧱 Project Structure
 
 ```
-WHETHERWISE/
+WeatherWise/
 ├── react_app/
 │   ├── backend/
 │   │   ├── db.js                 # Database connection using PostgreSQL

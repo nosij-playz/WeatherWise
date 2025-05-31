@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #43cea2, #185a9d);
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-box {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  color: #333;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.form-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.form-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #185a9d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-button:hover {
+  background-color: #1261a0;
+}
+
+.form-message {
+  margin-top: 15px;
+  font-size: 0.95rem;
+  color: #cc0000;
+}
+
+.form-link {
+  margin-top: 20px;
+  font-size: 0.95rem;
+}
+
+.form-link a {
+  color: #185a9d;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.form-link a:hover {
+  text-decoration: underline;
+}

@@ -7,6 +7,22 @@ WetherWise is a full-stack weather dashboard application that allows users to:
 - View real-time weather data fetched from the OpenWeatherMap API
 
 ---
+## Screenshots
+
+### Screenshot 1
+![Screenshot 1](./Pics/1.png)
+
+### Screenshot 2
+![Screenshot 2](./Pics/2.png)
+
+### Screenshot 3
+![Screenshot 3](./Pics/3.png)
+
+### Screenshot 4
+![Screenshot 4](./Pics/4.png)
+
+### Screenshot 5
+![Screenshot 5](./Pics/5.png)
 
 ## 🧱 Project Structure
 

@@ -67,7 +67,9 @@ function Profile() {
       setMessage(err.response?.data?.error || 'Update failed.');
     }
   };
-
+  const handleBack = () => {
+  navigate('/dashboard');
+  };
   const handleLogout = () => {
     localStorage.removeItem('username');
     navigate('/login');
@@ -78,31 +80,34 @@ function Profile() {
       <h2>Profile</h2>
 
       <div className="profile-info">
-        <input
-          name="newUsername"
-          placeholder="Username"
-          value={userData.newUsername}
-          onChange={handleChange}
-        />
-        <input
-          name="newEmail"
-          placeholder="Email"
-          value={userData.newEmail}
-          onChange={handleChange}
-        />
-        <input
-          name="newPassword"
-          type="password"
-          placeholder="New Password"
-          value={userData.newPassword}
-          onChange={handleChange}
-        />
-        <button onClick={handleUpdate}>Update Profile</button>
-      </div>
+  <input
+    name="newUsername"
+    placeholder="Username"
+    value={userData.newUsername}
+    onChange={handleChange}
+  />
+  <input
+    name="newEmail"
+    placeholder="Email"
+    value={userData.newEmail}
+    onChange={handleChange}
+  />
+  <input
+    name="newPassword"
+    type="password"
+    placeholder="New Password"
+    value={userData.newPassword}
+    onChange={handleChange}
+  />
+  <button onClick={handleUpdate}>Update Profile</button>
+</div>
 
-      {message && <p className="profile-message">{message}</p>}
+{message && <p className="profile-message">{message}</p>}
 
-      <button className="logout-btn" onClick={handleLogout}>Logout</button>
+<div className="profile-buttons">
+  <button className="back-btn" onClick={handleBack}>Back to Dashboard</button>
+  <button className="logout-btn" onClick={handleLogout}>Logout</button>
+</div>
     </div>
   );
 }

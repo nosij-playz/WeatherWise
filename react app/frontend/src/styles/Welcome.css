@@ -1,0 +1,196 @@
+.welcome-page {
+  min-height: 100vh;
+  background: url('/bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  padding-top: 5px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  gap: 30px;
+}
+
+.welcome-container {
+  padding: 60px 40px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 1.2s ease-out;
+  backdrop-filter: blur(10px);
+  max-width: 400px;
+  width: 100%;
+  z-index: 2;
+  text-align: center;
+}
+
+.welcome-subtitle {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  background: linear-gradient(90deg, #ffffff, #d1ecff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+  animation: glowText 3s ease-in-out infinite alternate;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.animated-button {
+  padding: 15px 35px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid white;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  animation: popUp 0.8s ease forwards;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: skewX(-20deg);
+  transition: all 0.5s;
+}
+
+.animated-button:hover::after {
+  left: 100%;
+}
+
+.animated-button:hover {
+  background-color: white;
+  color: #764ba2;
+  transform: scale(1.08);
+  box-shadow: 0 0 15px white;
+}
+
+/* Center App Name */
+.center-title {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3rem;
+  font-weight: 900;
+  top: 1.2rem;
+  background: linear-gradient(to right, #ffffff, #cde7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6);
+  animation: glowText 4s ease-in-out infinite alternate;
+  z-index: 3;
+}
+
+/* Right side features */
+.feature-list {
+  color: white;
+  max-width: 500px;
+  padding: 20px 20px;
+  line-height: 1.8;
+  font-size: 1.5rem;
+  animation: fadeIn 1.2s ease-out;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Better visibility */
+}
+
+.feature-list ul {
+  list-style: none; /* Remove default bullets */
+  padding-left: 0;
+}
+
+.feature-list li::before {
+  content: "•";
+  color: #ffffffaa;
+  margin-right: 10px;
+  font-size: 2.0rem;
+  vertical-align: middle;
+}
+
+.feature-list li {
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;            /* Prevent line breaks */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popUp {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes glowText {
+  0% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5),
+                 0 0 10px rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
+                 0 0 40px rgba(255, 255, 255, 0.6);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .welcome-page {
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+  }
+
+  .center-title {
+    position: static;
+    transform: none;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .welcome-container,
+  .feature-list {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .welcome-subtitle {
+    font-size: 1.8rem;
+  }
+
+  .animated-button {
+    padding: 12px 25px;
+    font-size: 0.95rem;
+  }
+  .feature-list {
+    font-size: 1.05rem;
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .feature-list li {
+    white-space: normal;
+  }
+}

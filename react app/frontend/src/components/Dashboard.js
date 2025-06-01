@@ -4,6 +4,29 @@ import '../styles/Dashboard.css';
 import { FaUserCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
+function getWindDirection(deg) {
+  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  const index = Math.round(deg / 45) % 8;
+  return directions[index];
+}
+
+function calculateDewPoint(tempC, humidity) {
+  const a = 17.27;
+  const b = 237.7;
+  const alpha = ((a * tempC) / (b + tempC)) + Math.log(humidity / 100);
+  const dewPoint = (b * alpha) / (a - alpha);
+  return dewPoint.toFixed(1);
+}
+
+function getUVGrade(uvi) {
+  if (uvi === 'N/A' || uvi == null) return { label: 'N/A', color: '#6c757d' };
+  if (uvi <= 2) return { label: 'Low', color: '#3fc380' };
+  if (uvi <= 5) return { label: 'Moderate', color: '#f4d03f' };
+  if (uvi <= 7) return { label: 'High', color: '#f39c12' };
+  if (uvi <= 10) return { label: 'Very High', color: '#e74c3c' };
+  return { label: 'Extreme', color: '#8e44ad' };
+}
+
 function Dashboard() {
   const [city, setCity] = useState('');
   const [weatherData, setWeatherData] = useState([]);
@@ -32,9 +55,28 @@ function Dashboard() {
         )
       );
 
-      const validWeather = weatherResponses
-        .filter(r => r.status === 'fulfilled')
-        .map(r => r.value.data);
+      const validWeather = [];
+
+      for (const response of weatherResponses) {
+        if (response.status === 'fulfilled') {
+          const weather = response.value.data;
+
+          // Fetch UV Index using lat/lon
+          const { lat, lon } = weather.coord;
+          try {
+            const oneCallRes = await axios.get(
+              `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily,alerts&appid=${API_KEY}`
+            );
+            const uvi = oneCallRes.data.current.uvi;
+            weather.uvi = uvi;
+          } catch (err) {
+            console.warn(`Could not fetch UV index for ${weather.name}`);
+            weather.uvi = 'N/A';
+          }
+
+          validWeather.push(weather);
+        }
+      }
 
       setWeatherData(validWeather);
 
@@ -132,37 +174,60 @@ function Dashboard() {
       {error && <p style={{ color: 'salmon', marginTop: '10px' }}>{error}</p>}
 
       <div className="weather-cards">
-        {weatherData.map((weather, index) => (
-          <div key={index} className="weather-card">
-            <div className="card-header">
-              <h2>{weather.name}</h2>
+        {weatherData.map((weather, index) => {
+          const uv = getUVGrade(weather.uvi);
+          return (
+            <div key={index} className="weather-card">
+              <div className="card-header">
+                <h2>{weather.name}</h2>
+                <button
+                  className="remove-btn"
+                  onClick={() => handleDeleteCity(weather.name)}
+                  title="Remove city"
+                >
+                  🗑️
+                </button>
+              </div>
+
+              <p>{weather.weather[0].description}</p>
+              <p>{weather.main.temp}°C / {(weather.main.temp * 9/5 + 32).toFixed(1)}°F</p>
+              <img
+                src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                alt={`Weather icon for ${weather.weather[0].description}`}
+              />
+
+              <div className="weather-details">
+  <p><strong>Wind:</strong> {weather.wind.speed} m/s {getWindDirection(weather.wind.deg)}</p>
+  <p><strong>Pressure:</strong> {weather.main.pressure} hPa</p>
+  <p><strong>Humidity:</strong> {weather.main.humidity}%</p>
+  <p><strong>Visibility:</strong> {(weather.visibility / 1000).toFixed(1)} km</p>
+  <p><strong>Dew Point:</strong> {calculateDewPoint(weather.main.temp, weather.main.humidity)}°C</p>
+
+  {/* Only show UV Index if it's valid */}
+  {weather.uvi !== 'N/A' && weather.uvi !== undefined && (
+    <p>
+      <strong>UV Index:</strong>{' '}
+      <span className="uv-badge" style={{ backgroundColor: uv.color }}>
+        {weather.uvi.toFixed(1)} ({uv.label})
+      </span>
+    </p>
+  )}
+</div>
+
               <button
-                className="remove-btn"
-                onClick={() => handleDeleteCity(weather.name)}
-                title="Remove city"
+                className="details-btn"
+                onClick={() =>
+                  window.open(
+                    `https://openweathermap.org/city/${weather.id}`,
+                    '_blank'
+                  )
+                }
               >
-                <span role="img" aria-label="trash">🗑️</span>
+                More Details
               </button>
             </div>
-            <p>{weather.weather[0].description}</p>
-            <p>{weather.main.temp}°C</p>
-            <img
-              src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-              alt={`Weather icon for ${weather.weather[0].description}`}
-            />
-            <button
-              className="details-btn"
-              onClick={() =>
-                window.open(
-                  `https://openweathermap.org/city/${weather.id}`,
-                  '_blank'
-                )
-              }
-            >
-              More Details
-            </button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

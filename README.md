@@ -24,6 +24,9 @@ WetherWise is a full-stack weather dashboard application that allows users to:
 ### Screenshot 5
 ![Screenshot 5](./Pics/5.png)
 
+### Screenshot 6
+![Screenshot 6](./Pics/6.png)
+
 ## 🧱 Project Structure
 
 ```

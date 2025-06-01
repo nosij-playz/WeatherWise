@@ -1,14 +1,32 @@
 /* styles/Dashboard.css */
-
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-image: url('bgimg/bg.jpg'); /* adjust the path */
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 .dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(to right, #667eea, #764ba2);
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 40px 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: white;
+}
+
+.uv-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: white;
+  display: inline-block;
+  margin-left: 6px;
 }
 
 .dashboard-title {
@@ -91,7 +109,7 @@
 }
 
 .weather-card {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(1, 1, 1, 0.35);
   padding: 20px;
   border-radius: 16px;
   text-align: center;

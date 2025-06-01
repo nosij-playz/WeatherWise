@@ -24,29 +24,37 @@ function Login() {
   };
 
   return (
-    <div className="form-container">
-      <div className="form-box">
-        <h2 className="form-title">Login</h2>
-        <input
-          className="form-input"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          placeholder="Username"
-        />
-        <input
-          className="form-input"
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          placeholder="Password"
-        />
-        <button className="form-button" onClick={handleLogin}>Login</button>
-        <p className="form-message">{message}</p>
-        <p className="form-link">
-          Don't have an account? <Link to="/signup">Sign up</Link>
-        </p>
-      </div>
+    <div className="welcome-page">
+  <h1 className="center-title">WeatherWise</h1>
+  <div className="login-wrapper">
+    <div className="form-box">
+      <h2 className="form-title">Login</h2>
+      <input
+        className="form-input"
+        value={username}
+        onChange={e => setUsername(e.target.value)}
+        placeholder="Username"
+      />
+      <input
+        className="form-input"
+        type="password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        placeholder="Password"
+      />
+      <button className="form-button" onClick={handleLogin}>Login</button>
+      <p className="form-message">{message}</p>
+      <p className="form-link">
+        Don't have an account? <Link to="/signup">Sign up</Link>
+      </p>
     </div>
+
+    <div className="side-box">
+      <img src="/images/60065761.png" alt="Weather Graphic" className="side-image" />
+      <p className="side-text">“Wherever you go, no matter what the weather, always bring your own sunshine.”</p>
+    </div>
+  </div>
+</div>
   );
 }
 

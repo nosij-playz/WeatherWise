@@ -1,4 +1,3 @@
-// index.js
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -7,6 +6,34 @@ const pool = require('./db');
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// ✅ Create tables if they don't exist
+const initializeTables = async () => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) UNIQUE NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS cities (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) NOT NULL,
+        city_name VARCHAR(100) NOT NULL,
+        added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    console.log("✅ Tables are ready.");
+  } catch (err) {
+    console.error("❌ Error initializing tables:", err);
+  }
+};
 
 // ✅ Signup endpoint
 app.post('/signup', async (req, res) => {
@@ -85,7 +112,8 @@ app.get('/cities/:username', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch cities' });
   }
 });
-// ✅ Update password
+
+// ✅ Get user details
 app.get('/user/:username', async (req, res) => {
   const { username } = req.params;
 
@@ -105,6 +133,8 @@ app.get('/user/:username', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// ✅ Get user ID
 app.post('/get-user-id', async (req, res) => {
   const { username, email } = req.body;
 
@@ -128,6 +158,8 @@ app.post('/get-user-id', async (req, res) => {
     res.status(500).json({ error: 'Database error.' });
   }
 });
+
+// ✅ Update user
 app.put('/update-user', async (req, res) => {
   const { currentUsername, newUsername, newEmail, newPassword } = req.body;
 
@@ -136,7 +168,6 @@ app.put('/update-user', async (req, res) => {
   }
 
   try {
-    // 1. Fetch the user ID
     const userResult = await pool.query(
       'SELECT id FROM users WHERE username = $1',
       [currentUsername]
@@ -148,7 +179,6 @@ app.put('/update-user', async (req, res) => {
 
     const userId = userResult.rows[0].id;
 
-    // 2. Check if new username is taken by someone else
     if (newUsername) {
       const usernameCheck = await pool.query(
         'SELECT id FROM users WHERE username = $1 AND id != $2',
@@ -160,7 +190,6 @@ app.put('/update-user', async (req, res) => {
       }
     }
 
-    // 3. Check if new email is taken by someone else
     if (newEmail) {
       const emailCheck = await pool.query(
         'SELECT id FROM users WHERE email = $1 AND id != $2',
@@ -172,7 +201,6 @@ app.put('/update-user', async (req, res) => {
       }
     }
 
-    // 4. Build dynamic update query
     const fields = [];
     const values = [];
     let index = 1;
@@ -188,7 +216,6 @@ app.put('/update-user', async (req, res) => {
     }
 
     if (newPassword) {
-      const bcrypt = require('bcrypt');
       const hashed = await bcrypt.hash(newPassword, 10);
       fields.push(`password_hash = $${index++}`);
       values.push(hashed);
@@ -198,7 +225,6 @@ app.put('/update-user', async (req, res) => {
       return res.status(400).json({ error: 'No fields to update.' });
     }
 
-    // Add WHERE id = ...
     values.push(userId);
     const query = `UPDATE users SET ${fields.join(', ')} WHERE id = $${index}`;
 
@@ -210,6 +236,7 @@ app.put('/update-user', async (req, res) => {
     res.status(500).json({ error: 'Database update failed.' });
   }
 });
+
 // ✅ Delete city
 app.delete('/delete-city', async (req, res) => {
   const { username, city } = req.body;
@@ -236,7 +263,9 @@ app.delete('/delete-city', async (req, res) => {
   }
 });
 
-// ✅ Start server
-app.listen(5000, () => {
-  console.log('🚀 Server running at http://localhost:5000');
+// ✅ Start server after initializing tables
+initializeTables().then(() => {
+  app.listen(5000, () => {
+    console.log('🚀 Server running at http://localhost:5000');
+  });
 });
